@@ -58,6 +58,19 @@ public class TechnologiesManager implements TechnologiesService {
 
     @Override
     public void Add(CreateTechnologyRequest createTechnologyRequest) throws Exception{
+        Technologies technologies = new Technologies();
+        technologies.setName(createTechnologyRequest.getName());
+
+        List<Technologies> technologies1=technologiesRepository.findAll();
+        for(Technologies technologies2:technologies1){
+            if (technologies2.getName().equals(technologies.getName())){
+                throw new Exception("Aynı isimde bir programlama dili mecvut!!");
+            }
+        }
+        if(technologies.getName().isEmpty()){
+            throw new Exception("Programlama dili boş geçilemez!!");
+        }
+        this.technologiesRepository.save(technologies);
 
     }
 
@@ -71,6 +84,21 @@ public class TechnologiesManager implements TechnologiesService {
 
     @Override
     public void Update(UpdateTechologyRequest updateTechologyRequest) throws Exception{
-
+         Technologies technologies=new Technologies();
+        technologies.setName(updateTechologyRequest.getName());
+        List<Technologies> technologies1=technologiesRepository.findAll();
+        for(Technologies technologies2:technologies1){
+            if (technologies2.getName().equals(technologies.getName())){
+                throw new Exception("Aynı isimde bir programlama dili mecvut!!");
+            }
+        }
+        if(technologies.getName().isEmpty()){
+            throw new Exception("Programlama dili boş geçilemez!!");
+        }
+        Technologies updatedTechnologyLanguage = technologiesRepository
+                .getReferenceById(technologies.getId());
+        updatedTechnologyLanguage.setName(technologies.getName());
+        technologiesRepository.save(updatedTechnologyLanguage);
+        this.technologiesRepository.save(technologies);
     }
 }
